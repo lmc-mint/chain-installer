@@ -4,7 +4,7 @@
     path: "{{ home_folder }}/.commercionetwork"
 
 - name: Init commercionetwork node
-  shell: ./commercionetworkd init {{ moniker }}
+  shell: ./commercionetworkd init "{{ moniker }}"
   args:
     chdir: "~/go/bin"
     executable: /bin/bash

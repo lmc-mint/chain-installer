@@ -32,15 +32,16 @@
 - name: Download cosmovisor binary repo
   git:
     repo: https://github.com/cosmos/cosmos-sdk.git
-    dest: "{{ home_folder }}/cosmos-sdk"
+    dest: "{{ cosmos_repo }}"
     version: cosmovisor/{{ cosmovisor_version }}
     force: true
   become: true
   become_user: "{{ comm_user }}"
 
-- name: Run 'make' on target
+- name: Run 'make cosmovisor' on target
   make:
-    chdir: "{{ home_folder }}/cosmos-sdk/cosmovisor"
+    chdir: "{{ cosmos_repo }}/cosmovisor"
+    target: cosmovisor
   environment:
     PATH: "/usr/local/go/bin:/snap/bin:/usr/bin/:$PATH"
   ignore_errors: true
@@ -49,7 +50,7 @@
 
 - name: Move cosmovisor to GOPATH
   copy:
-    src: "{{ home_folder }}/cosmos-sdk/cosmovisor/cosmovisor"
+    src: "{{ cosmos_repo }}/cosmovisor/cosmovisor"
     dest: "{{ go_path }}/bin"
     mode: a+x
     remote_src: true
