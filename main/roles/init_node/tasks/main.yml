@@ -1,0 +1,31 @@
+- name: Remove previous commercionetwork directory
+  file:
+    state: absent
+    path: "{{ home_folder }}/.commercionetwork"
+
+- name: Init commercionetwork node
+  shell: ./commercionetworkd init {{ moniker }}
+  args:
+    chdir: "~/go/bin"
+    executable: /bin/bash
+  become: true
+  become_user: "{{ comm_user }}"
+
+- name: Create directory structure
+  file:
+    path: "{{ item }}"
+    state: directory
+  loop:
+    - "{{ home_folder }}/.commercionetwork/cosmovisor/genesis/bin"
+    - "{{ home_folder }}/.commercionetwork/cosmovisor/upgrades"
+  become: true
+  become_user: "{{ comm_user }}"
+
+- name: Copy commercionetwork binary to cosmovisor folder
+  copy:
+    src: "{{ home_folder }}/go/bin/commercionetworkd"
+    dest: "{{ home_folder }}/.commercionetwork/cosmovisor/genesis/bin"
+    mode: a+x
+    remote_src: true
+  become: true
+  become_user: "{{ comm_user }}"

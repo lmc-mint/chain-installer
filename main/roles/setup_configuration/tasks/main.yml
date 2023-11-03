@@ -1,0 +1,145 @@
+- name: Download genesis file
+  get_url:
+    url: https://raw.githubusercontent.com/commercionetwork/chains/master/commercio-3/genesis.json
+    dest: "~/.commercionetwork/config/genesis.json"
+    checksum: sha256:a4a8a70f471aaef36f820996a0bcbb6b74f7ac1ff0756d0de63ec1db21e4f2f8
+  become: true
+  become_user: "{{ comm_user }}"
+
+- name: Making sure proper variables are set
+  assert:
+    that:
+      - sync_type is defined
+      - sync_type == "pull" or sync_type == "push" or sync_type == "statesync" or sync_type == "dump" or sync_type == "none"
+    fail_msg: "'sync_type' incorrectly set or not set"
+
+- name: Copy config file
+  template:
+    src: config.toml
+    dest: "~/.commercionetwork/config/config.toml"
+  become: true
+  become_user: "{{ comm_user }}"
+  when: sync_type != "statesync"
+
+- name: Get current height from RPC
+  uri:
+    url: http://{{ trust_rpc1 }}/block
+    method: GET
+    return_content: true
+    status_code: 200
+    body_format: json
+  register: result
+  when: sync_type == "statesync"
+
+- name: Get last height
+  set_fact:
+    last_height: "{{ result.json | json_query('result.block.header.height') }}"
+  when: sync_type == "statesync"
+
+- name: Get trust height
+  set_fact:
+    trust_height: "{{ last_height | int - (last_height | int  % 1000) }}"
+  when: sync_type == "statesync"
+
+- name: Pull block data starting from trust height
+  uri:
+    url: http://{{ trust_rpc1 }}/block?height={{ trust_height }}
+    method: GET
+    return_content: true
+    status_code: 200
+    body_format: json
+  register: result
+  when: sync_type == "statesync"
+
+- name: Get trust hash
+  set_fact:
+    trust_hash: "{{ result.json | json_query('result.block_id.hash') }}"
+  when: sync_type == "statesync"
+
+- name: Copy config file with statesync
+  template:
+    src: config_statesync.toml
+    dest: "~/.commercionetwork/config/config.toml"
+  become: true
+  become_user: "{{ comm_user }}"
+  when: sync_type == "statesync"
+
+- name: Change external drive ownership
+  file:
+    path: "{{ external_drive }}"
+    owner: "{{ comm_user }}"
+    recurse: true
+  become: true
+  when: external_drive is defined
+
+- name: Set external drive 
+  set_fact:
+    drive_var: "{{ external_drive }}"
+  when: external_drive is defined
+
+- name: Set internal drive 
+  set_fact:
+    drive_var: "{{ home_folder }}/.commercionetwork"
+  when: external_drive is not defined
+
+- name: Unarchive blockchain dump on storage
+  unarchive: 
+    src: "https://quicksync.commercio.network/{{ chain_id }}.latest.tgz"
+    dest: "{{ drive_var }}"
+    remote_src: true
+  become: true
+  become_user: "{{ comm_user }}"
+  when: sync_type == "dump"
+
+- name: Sync database from host
+  command: "rsync -a --delete -e \"ssh -A -o StrictHostKeyChecking=no\" root@{{ sync_node }}:{{ sync_node_home_folder }}/.commercionetwork/data/ {{ drive_var }}/data/"
+  delegate_to: "{{ ansible_host }}"
+  ignore_errors: true
+  when: sync_type == "pull"
+
+- name: Sync database from sync node
+  command: "rsync -a --delete -e \"ssh -A -o StrictHostKeyChecking=no\" {{ sync_node_home_folder }}/.commercionetwork/data/ root@{{ ansible_host }}:/{{ drive_var }}/data/"
+  delegate_to: "{{ sync_node }}"
+  ignore_errors: true
+  when: sync_type == "push"
+
+- name: Stop sync node commercionetworkd service
+  systemd:
+    name: commercionetworkd
+    state: stopped
+  delegate_to: "{{ sync_node }}"
+  when: sync_type == "push" or sync_type == "pull"
+
+- name: Sync database from host
+  command: "rsync -a --delete -e \"ssh -A -o StrictHostKeyChecking=no\" root@{{ sync_node }}:{{ sync_node_home_folder }}/.commercionetwork/data/ {{ drive_var }}/data/"
+  delegate_to: "{{ ansible_host }}"
+  when: sync_type == "pull"
+
+- name: Sync database from sync node
+  command: "rsync -a --delete -e \"ssh -A -o StrictHostKeyChecking=no\" {{ sync_node_home_folder }}/.commercionetwork/data/ root@{{ ansible_host }}:/{{ drive_var }}/data/"
+  delegate_to: "{{ sync_node }}"
+  when: sync_type == "push"
+
+- name: Start sync node commercionetworkd service
+  systemd:
+    name: commercionetworkd
+    state: started
+  delegate_to: "{{ sync_node }}"
+  when: sync_type == "push" or sync_type == "pull"
+
+- name: Remove data folder
+  file:
+    path: "~/.commercionetwork/data"
+    state: absent
+  become_user: "{{ comm_user }}"
+  become: true
+  when: external_drive is defined
+
+- name: Create a symlink to the blockchain dump
+  file:
+    src: "{{ external_drive }}/data"
+    dest: "~/.commercionetwork/data"
+    state: link
+    owner: "{{ comm_user }}"
+  become_user: "{{ comm_user }}"
+  when: external_drive is defined

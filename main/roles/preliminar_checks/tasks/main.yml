@@ -1,0 +1,19 @@
+- name: Check if commercionetworkd service exists
+  stat:
+    path: /etc/systemd/system/commercionetworkd.service
+  register: service_status
+  become: true
+
+- name: Check services state
+  service_facts:
+  register: services_state
+  become: true
+  when: service_status.stat.exists
+
+- name: Exit if commercionetworkd service is already running
+  fail:
+    msg: "Nothing to install! commercionetwork service is already running."
+  become: true
+  when:
+  - service_status.stat.exists and ansible_facts.services["commercionetworkd.service"] is defined
+  - ansible_facts.services["commercionetworkd.service"]["state"] == "running"

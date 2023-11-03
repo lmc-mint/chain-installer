@@ -1,0 +1,6 @@
+- name: Load commercionetworkd service
+  systemd:
+    name: commercionetworkd
+    daemon_reload: true
+    state: started
+    enabled: true

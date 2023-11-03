@@ -1,0 +1,22 @@
+[Unit]
+Description=Commercio Network Node
+After=network.target
+
+[Service]
+User={{ comm_user }}
+LimitNOFILE=4096
+
+Restart=always
+RestartSec=3
+
+Environment="DAEMON_NAME=commercionetworkd"
+Environment="DAEMON_HOME={{ home_folder }}/.commercionetwork"
+Environment="DAEMON_RESTART_AFTER_UPGRADE=true"
+Environment="DAEMON_ALLOW_DOWNLOAD_BINARIES=false"
+Environment="DAEMON_LOG_BUFFER_SIZE=512"
+Environment="UNSAFE_SKIP_BACKUP=true"
+
+ExecStart={{ home_folder }}/go/bin/cosmovisor run start --home="{{ home_folder }}/.commercionetwork" 
+
+[Install]
+WantedBy=multi-user.target

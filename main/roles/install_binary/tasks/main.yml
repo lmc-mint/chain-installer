@@ -1,0 +1,57 @@
+- name: Set GO env in commercionetwork user path
+  lineinfile:
+    path: "~/.bashrc"
+    line: "{{ item }}"
+  loop:
+  - "GOPATH={{ go_path }}"
+  - "PATH=$GOPATH/bin:/usr/local/go/bin:$PATH"
+  become: true
+  become_user: "{{ comm_user }}"
+
+- name: Reset ssh connection
+  meta: reset_connection  
+
+- name: Download commercionetwork binary repo
+  git:
+    repo: https://github.com/commercionetwork/commercionetwork.git
+    dest: "{{ comm_repo }}"
+    version: "{{ bin_version }}"
+    force: true
+  become: true
+  become_user: "{{ comm_user }}"
+
+- name: Run 'install' on target
+  make:
+    chdir: "{{ comm_repo }}"
+    target: install
+  environment:
+    PATH: "/usr/local/go/bin:/snap/bin:/usr/bin/:$PATH"
+  become: true
+  become_user: "{{ comm_user }}"
+
+- name: Download cosmovisor binary repo
+  git:
+    repo: https://github.com/cosmos/cosmos-sdk.git
+    dest: "{{ home_folder }}/cosmos-sdk"
+    version: cosmovisor/{{ cosmovisor_version }}
+    force: true
+  become: true
+  become_user: "{{ comm_user }}"
+
+- name: Run 'make' on target
+  make:
+    chdir: "{{ home_folder }}/cosmos-sdk/cosmovisor"
+  environment:
+    PATH: "/usr/local/go/bin:/snap/bin:/usr/bin/:$PATH"
+  ignore_errors: true
+  become: true
+  become_user: "{{ comm_user }}"
+
+- name: Move cosmovisor to GOPATH
+  copy:
+    src: "{{ home_folder }}/cosmos-sdk/cosmovisor/cosmovisor"
+    dest: "{{ go_path }}/bin"
+    mode: a+x
+    remote_src: true
+  become: true
+  become_user: "{{ comm_user }}"

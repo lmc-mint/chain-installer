@@ -1,0 +1,17 @@
+- name: Set home_folder
+  set_fact:
+    home_folder: >-
+      {%- if comm_user == "root" %}
+      /root
+      {%- else %}
+      /home/{{ comm_user }}
+      {%- endif %}
+      
+- name: Set sync_node_home_folder
+  set_fact:
+    sync_node_home_folder: >-
+      {%- if sync_node_comm_user == "root" %}
+      /root
+      {%- else %}
+      /home/{{ sync_node_comm_user }}
+      {%- endif %}

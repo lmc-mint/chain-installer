@@ -1,0 +1,5 @@
+- name: Copy the commercionetwork service definition
+  template:
+    src: commercionetworkd.service
+    dest: /etc/systemd/system/commercionetworkd.service
+  become: true

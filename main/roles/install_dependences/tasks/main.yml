@@ -1,0 +1,17 @@
+- name: Install dependences
+  apt:
+    pkg:
+      - make
+      - whois
+      - gcc
+      - jq
+      - xinetd
+      - acl
+      - git
+    update_cache: true
+  become: true
+
+- name: Upgrade node
+  apt:
+    upgrade: yes
+  become: true

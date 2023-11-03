@@ -1,0 +1,22 @@
+- name: Disable UFW
+  ufw:
+    state: disabled
+  become: true
+
+- name: Copy test height script
+  template:
+    src: test_height.sh
+    dest: "~/test_height.sh"
+    mode: a+x
+  become: true
+  become_user: "{{ comm_user }}"
+  when: slack_hook != ""
+
+- name: install crontab
+  cron:
+    name: "check node height"
+    minute: "*/5"
+    job: "{{ home_folder }}/test_height.sh >{{ home_folder }}/test_height.log 2>&1"
+  become: true
+  become_user: "{{ comm_user }}"
+  when: slack_hook != ""
