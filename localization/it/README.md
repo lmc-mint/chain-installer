@@ -2,6 +2,9 @@
 Il playbook configura un server per essere un full node di Commercio Network e installa uno script che rileva se il nodo sta perdendo blocchi.
 Se il nodo perde blocchi, verrà inoltrato un messaggio su un canale slack a scelta.
 
+**ATTENZIONE: Il playbook può essere utilizzato solo per mainnet. Non utilizzarlo per testnet o devnet o localnet.**
+
+
 ## Prerequisiti
 I prerequisiti per utilizzare questo playbook sono:
 * Avere un server su cui installare il nodo

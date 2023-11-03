@@ -2,6 +2,8 @@
 The playbook configures a server to be a Commercio Network full node and installs a script that detects whether the node is losing blocks.
 If the node loses blocks, a message will be forwarded to a slack channel of your choice.
 
+**WARNING: The playbook can use only for mainnet. Don't use it for testnet or devnet or localnet.**
+
 ## Prerequisites
 The prerequisites to use this playbook are:
 * Have a server on which to install the node
