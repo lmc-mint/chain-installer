@@ -1,8 +1,25 @@
+- name: Get data from URL
+  uri:
+    url: "https://raw.githubusercontent.com/lmc-mint/chains/master/{{ chain_id }}/.data.json"
+    method: GET
+    return_content: yes
+  register: chain_data
+
+- name: Parse json into variable
+  set_fact:
+    parsed_data: "{{ chain_data.content | from_json}}"
+
+- name: parse chain data content
+  set_fact:
+    seeds: "{{ parsed_data.Seeds }}"
+    persistent_peers: "{{ parsed_data.Persistent_peers }}"
+    checksum: "{{ parsed_data.Genesis_Checksum }}"
+
 - name: Download genesis file
   get_url:
-    url: https://raw.githubusercontent.com/commercionetwork/chains/master/commercio-3/genesis.json
+    url: https://raw.githubusercontent.com/commercionetwork/chains/master/{{ chain_id }}/genesis.json
     dest: "~/.commercionetwork/config/genesis.json"
-    checksum: sha256:a4a8a70f471aaef36f820996a0bcbb6b74f7ac1ff0756d0de63ec1db21e4f2f8
+    checksum: "sha256:{{ checksum }}"
   become: true
   become_user: "{{ comm_user }}"
 

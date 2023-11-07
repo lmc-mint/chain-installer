@@ -2,7 +2,7 @@
 The playbook configures a server to be a Commercio Network full node and installs a script that detects whether the node is losing blocks.
 If the node loses blocks, a message will be forwarded to a slack channel of your choice.
 
-**WARNING: The playbook can use only for mainnet. Don't use it for testnet or devnet or localnet.**
+ * **The playbook is designed for mainnet or testnet installation. It should not be used for other types of installations**
 
 ## Prerequisites
 The prerequisites to use this playbook are:
@@ -55,9 +55,13 @@ To use the playbook you need to proceed as follows:
      | `trust_rpc2` | Second RPC to sync from in case of `sync_type` = `statesync` |
      | `slack_hook` | Webhook where to send reports about a node losing blocks. **No script will be installed if a webhook isn't set** |
 
+    The `chain_id` variable determines the blockchain chain-id to be used for the installation. Depending on whether you want to install the Commercionetwork in the mainnet or testnet , you can configure the `chain_id` variable accordingly.
+
+    By specifying the `chain_id` variable and ensuring that you align it with the associated settings, such as the first and second RPC to sync in case of `sync_type = statesync`, you can adapt the installation process to suit your targeted network
+
 2. Proceed to run the `main` playbook:
 ```bash
-ansible-playbook -i hosts.ini main/commercio.yml
+ansible-playbook -i .hosts.ini main/commercio.yml
 ```
 
 Run the playbook from the root folder of this repo.
