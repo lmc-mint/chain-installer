@@ -1,6 +1,6 @@
 - name: Get data from URL
   uri:
-    url: "https://raw.githubusercontent.com/lmc-mint/chains/master/{{ chain_id }}/.data.json"
+    url: "https://raw.githubusercontent.com/commercionetwork/chains/master/{{ chain_id }}/.data.json"
     method: GET
     return_content: yes
   register: chain_data
@@ -14,6 +14,9 @@
     seeds: "{{ parsed_data.Seeds }}"
     persistent_peers: "{{ parsed_data.Persistent_peers }}"
     checksum: "{{ parsed_data.Genesis_Checksum }}"
+    trust_rpc1: "{{ parsed_data.Trust_rpc1 }}"
+    trust_rpc2: "{{ parsed_data.Trust_rpc2 }}"
+
 
 - name: Download genesis file
   get_url:

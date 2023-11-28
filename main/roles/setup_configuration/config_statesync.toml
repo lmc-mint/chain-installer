@@ -291,7 +291,7 @@ enable = true
 #
 # For Cosmos SDK-based chains, trust_period should usually be about 2/3 of the unbonding time (~2
 # weeks) during which they can be financially punished (slashed) for misbehavior.
-rpc_servers = "{{ trust_rpc1 }},{{ trust_rpc2 }}"
+rpc_servers = "{{ rpc_servers }}"
 trust_height = {{ trust_height }}
 trust_hash = "{{ trust_hash }}"
 trust_period = "168h0m0s"
