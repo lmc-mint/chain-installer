@@ -40,9 +40,10 @@ To use the playbook you need to proceed as follows:
          * `statesync`: synchronization occurs via statesync.
          * `none`: synchronization occurs normally.
     
-    The `chain_id` parameter determines the blockchain chain-id to be used for the installation. Depending on whether you want to install the Commercionetwork in the mainnet or testnet , you can specify the `chain_id` parameter in the `hosts.ini` file accordingly.
+     The `chain_id` parameter determines the blockchain chain-id to be used for the installation. Depending on whether you want to install the Commercionetwork node in the mainnet or testnet , you can specify the `chain_id` parameter in the `hosts.ini` file accordingly.
 
-     You can change the behavior of the playbook based on the variables indicated in the `all` file located in the `main/group_vars` path. Below is the table of their meaning:
+     Copy `all.template` to the file `all` located in the `main/group_vars` directory and customize your variables. You can change the behavior of the playbook based on that variables. Below is the table of their meaning:
+
      | Variable name | Usage |
      | -- | -- |
      | `bin_version` | Version of the Commercionetworkd binary to use |
@@ -53,9 +54,10 @@ To use the playbook you need to proceed as follows:
      | `cosmovisor_version` | Version of Cosmovisor to install |
      | `sync_node` | Node IP to sync from in case of `sync_type` = `push` or `pull` |
      | `sync_node_home_folder` | Node home folder to sync from in case of `sync_type` = `push` or `pull` |
-     | `rpc_servers` | First and second RPC to sync from in case of `sync_type` = `statesync` |
+     | `custom_trust_rpc1` | First RPC to sync from in case of sync_type = statesync `sync_type` = `statesync` |
+     | `custom_trust_rpc2` | Second RPC to sync from in case of sync_type = statesync `sync_type` = `statesync` |
      | `slack_hook` | Webhook where to send reports about a node losing blocks. **No script will be installed if a webhook isn't set** |
-    
+        
 2. Proceed to run the `main` playbook:
 ```bash
 ansible-playbook -i hosts.ini main/commercio.yml

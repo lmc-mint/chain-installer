@@ -14,9 +14,8 @@
     seeds: "{{ parsed_data.Seeds }}"
     persistent_peers: "{{ parsed_data.Persistent_peers }}"
     checksum: "{{ parsed_data.Genesis_Checksum }}"
-    trust_rpc1: "{{ parsed_data.Trust_rpc1 }}"
-    trust_rpc2: "{{ parsed_data.Trust_rpc2 }}"
-
+    trust_rpc1: "{{ custom_trust_rpc1 if custom_trust_rpc1 is defined and custom_trust_rpc1 != '' else parsed_data.Trust_rpc1 }}"
+    trust_rpc2: "{{ custom_trust_rpc2 if custom_trust_rpc2 is defined and custom_trust_rpc1 != '' else parsed_data.Trust_rpc2 }}"
 
 - name: Download genesis file
   get_url:
