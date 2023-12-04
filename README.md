@@ -46,7 +46,7 @@ To use the playbook you need to proceed as follows:
 
      | Variable name | Usage |
      | -- | -- |
-     | `bin_version` | Version of the Commercionetworkd binary to use |
+     | `custom_bin_version` | Version of the Commercionetworkd binary to use |
      | `genesis` | Genesis file URL |
      | `comm_repo` | Path and name of where the Commercio.network binary repository is downloaded |
      | `home_folder` | Home where the `.commercionetwork` folder is installed |
