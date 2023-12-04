@@ -1,4 +1,4 @@
-bin_version: "v5.0.0"
+custom_bin_version: "v5.0.0"
 genesis: "https://raw.githubusercontent.com/commercionetwork/chains/master/{{ chain_id }}/genesis.json"
 comm_repo: "~/comm-binary"
 cosmos_repo: "~/cosmos-sdk"

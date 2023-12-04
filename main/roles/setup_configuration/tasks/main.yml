@@ -1,22 +1,3 @@
-- name: Get data from URL
-  uri:
-    url: "https://raw.githubusercontent.com/commercionetwork/chains/master/{{ chain_id }}/.data.json"
-    method: GET
-    return_content: yes
-  register: chain_data
-
-- name: Parse json into variable
-  set_fact:
-    parsed_data: "{{ chain_data.content | from_json}}"
-
-- name: parse chain data content
-  set_fact:
-    seeds: "{{ parsed_data.Seeds }}"
-    persistent_peers: "{{ parsed_data.Persistent_peers }}"
-    checksum: "{{ parsed_data.Genesis_Checksum }}"
-    trust_rpc1: "{{ custom_trust_rpc1 if custom_trust_rpc1 is defined and custom_trust_rpc1 != '' else parsed_data.Trust_rpc1 }}"
-    trust_rpc2: "{{ custom_trust_rpc2 if custom_trust_rpc2 is defined and custom_trust_rpc1 != '' else parsed_data.Trust_rpc2 }}"
-
 - name: Download genesis file
   get_url:
     url: https://raw.githubusercontent.com/commercionetwork/chains/master/{{ chain_id }}/genesis.json
