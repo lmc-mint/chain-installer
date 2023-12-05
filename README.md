@@ -46,7 +46,7 @@ To use the playbook you need to proceed as follows:
 
      | Variable name | Usage |
      | -- | -- |
-     | `custom_bin_version` | Version of the Commercionetworkd binary to use |
+     | `custom_bin_version` | Version of the Commercionetworkd binary to use. **Default bin version will be used if a custom bin version isn't set** |
      | `genesis` | Genesis file URL |
      | `comm_repo` | Path and name of where the Commercio.network binary repository is downloaded |
      | `home_folder` | Home where the `.commercionetwork` folder is installed |
@@ -54,8 +54,8 @@ To use the playbook you need to proceed as follows:
      | `cosmovisor_version` | Version of Cosmovisor to install |
      | `sync_node` | Node IP to sync from in case of `sync_type` = `push` or `pull` |
      | `sync_node_home_folder` | Node home folder to sync from in case of `sync_type` = `push` or `pull` |
-     | `custom_trust_rpc1` | First RPC to sync from in case of sync_type = statesync `sync_type` = `statesync` |
-     | `custom_trust_rpc2` | Second RPC to sync from in case of sync_type = statesync `sync_type` = `statesync` |
+     | `custom_trust_rpc1` | First RPC to sync from in case of sync_type = statesync `sync_type` = `statesync`. **Default RPC1 will be used if a first RPC isn't set** |
+     | `custom_trust_rpc2` | Second RPC to sync from in case of sync_type = statesync `sync_type` = `statesync`. **Default RPC2 will be used if a second RPC isn't set**  |
      | `slack_hook` | Webhook where to send reports about a node losing blocks. **No script will be installed if a webhook isn't set** |
         
 2. Proceed to run the `main` playbook:
