@@ -24,6 +24,33 @@
     seeds: "{{ parsed_data.Seeds }}"
     persistent_peers: "{{ parsed_data.Persistent_peers }}"
     checksum: "{{ parsed_data.Genesis_Checksum }}"
-    trust_rpc1: "{{ custom_trust_rpc1 if custom_trust_rpc1 is defined and custom_trust_rpc1 != '' else parsed_data.Trust_rpc1 }}"
-    trust_rpc2: "{{ custom_trust_rpc2 if custom_trust_rpc2 is defined and custom_trust_rpc1 != '' else parsed_data.Trust_rpc2 }}"
-    bin_version: "{{ custom_bin_version if custom_bin_version is defined and custom_bin_version != '' else parsed_data.Release}}"
+
+- name: set default trust rpc1
+  set_fact:
+    trust_rpc1: "{{ parsed_data.Trust_rpc1 }}"
+  when: custom_trust_rpc1 is not defined or custom_trust_rpc1 == ''
+
+- name: set custom trust rpc1
+  set_fact:
+    trust_rpc1: "{{ custom_trust_rpc1 }}"
+  when: custom_trust_rpc1 is defined and custom_trust_rpc1 != ''
+
+- name: set default trust rpc2
+  set_fact:
+    trust_rpc2: "{{ parsed_data.Trust_rpc2 }}"
+  when: custom_trust_rpc2 is not defined or custom_trust_rpc2 == ''
+
+- name: set custom trust rpc2
+  set_fact:
+    trust_rpc2: "{{ custom_trust_rpc2 }}"
+  when: custom_trust_rpc2 is defined and custom_trust_rpc2 != ''
+
+- name: set default bin version
+  set_fact:
+    bin_version: "{{ parsed_data.Release }}"
+  when: custom_bin_version is not defined or custom_bin_version == ''
+
+- name: set custom bin version
+  set_fact:
+    bin_version: "{{ custom_bin_version }}"
+  when: custom_bin_version is defined and custom_bin_version != ''
