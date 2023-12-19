@@ -62,7 +62,7 @@ To use the playbook you need to proceed as follows:
      | `custom_trust_rpc2` | Second RPC to sync from in case of sync_type = statesync `sync_type` = `statesync`.  |
      | `slack_hook` | Webhook where to send reports about a node losing blocks. **No script will be installed if a webhook isn't set** |
 
-If you want to use a specific cosmovisor verion , you can run the following command to list all the cosmovisor versions:
+If you want to use a specific cosmovisor version , you can run the following command to list all the cosmovisor versions:
 
 ```bash
 git -c 'versionsort.suffix=-' ls-remote --tags --sort='v:refname' https://github.com/cosmos/cosmos-sdk.git | grep "cosmovisor" | fgrep -v '{}'
