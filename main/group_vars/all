@@ -1,0 +1,4 @@
+comm_user: "cnd"
+sync_node: ""
+sync_node_comm_user: "root"
+slack_hook: ""
