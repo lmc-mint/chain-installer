@@ -54,3 +54,53 @@
   set_fact:
     bin_version: "{{ custom_bin_version }}"
   when: custom_bin_version is defined and custom_bin_version != ''
+
+- name: set default cosmovisor version
+  set_fact:
+    cosmovisor_version: "v1.3.0"
+  when: custom_cosmovisor_version is not defined or custom_cosmovisor_version == ''
+
+- name: set custom cosmovisor version
+  set_fact:
+    cosmovisor_version: "{{ custom_bin_version }}"
+  when: custom_cosmovisor_version is defined and custom_cosmovisor_version != ''  
+
+- name: set default genesis file url
+  set_fact:
+    genesis: "https://raw.githubusercontent.com/commercionetwork/chains/master/{{ chain_id }}/genesis.json"
+  when: custom_genesis is not defined or custom_genesis == ''
+
+- name: set custom genesis file url
+  set_fact:
+    genesis: "{{ custom_genesis }}"
+  when: custom_genesis is defined and custom_genesis != ''  
+
+- name: set default go path
+  set_fact:
+    go_path: "{{ home_folder }}/go"
+  when: custom_go_path is not defined or custom_go_path == ''
+
+- name: set custom go path
+  set_fact:
+    go_path: "{{ custom_go_path }}"
+  when: custom_go_path is defined and custom_go_path != ''  
+
+- name: set default comm repo
+  set_fact:
+    comm_repo: "~/comm-binary"
+  when: custom_comm_repo is not defined or custom_comm_repo == ''
+
+- name: set custom comm repo
+  set_fact:
+    comm_repo: "{{ custom_comm_repo }}"
+  when: custom_comm_repo is defined and custom_comm_repo != ''  
+
+- name: set default cosmos repo
+  set_fact:
+    cosmos_repo: "~/cosmos-sdk"
+  when: custom_cosmos_repo is not defined or custom_cosmos_repo == ''
+
+- name: set custom cosmos repo
+  set_fact:
+    cosmos_repo: "{{ custom_cosmos_repo }}"
+  when: custom_cosmos_repo is defined and custom_cosmos_repo != ''  
