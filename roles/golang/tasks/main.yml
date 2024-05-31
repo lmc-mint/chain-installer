@@ -1,0 +1,6 @@
+- name: install-golang
+  import_role:
+    name: gantsign.golang
+  vars:
+    golang_gopath: '{{ go_path }}'
+    golang_install_dir: '/usr/local/go'
