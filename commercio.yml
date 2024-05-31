@@ -8,7 +8,9 @@
     - preliminar_checks
     - install_dependences
     - create_user
-    - golang
+    - role: gantsign.golang
+      golang_gopath: '{{ go_path }}'
+      golang_install_dir: '/usr/local/go'
     - install_binary
     - setup_service
     - init_node
