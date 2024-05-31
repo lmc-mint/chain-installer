@@ -20,8 +20,8 @@ fi
 
 if [ -z $latest_block_height ]; then
     if [ $count_errors -gt 3 ]; then
-    echo "[ERROR] Attenzione qualcosa non funziona sul nodo: sembra spento il service"
-    curl -s -S -X POST -H 'Content-type: application/json' --data '{"text":"*'$HOSTNAME'* Attenzione qualcosa non funziona sul nodo: sembra spento il service!"}' "{{ slack_hook }}"
+    echo "[ERROR] Warning, something is not working on the node: the service seems to be turned off"
+    curl -s -S -X POST -H 'Content-type: application/json' --data '{"text":"*'$HOSTNAME'* Warning, something is not working on the node: the service seems to be turned off!"}' "{{ slack_hook }}"
     else
         count_errors=$(($count_errors+1))
         printf $count_errors > $count_errors_rec
@@ -35,16 +35,16 @@ if [ -f $previous_block_height_rec ]; then
     previous_block_height=$(cat $previous_block_height_rec)
 else
     printf $latest_block_height >$previous_block_height_rec
-    echo "[OK] Per ora tutto bene"
+    echo "[OK] Everything is Ok for the moment"
     exit
 fi
 
 if [ ! $latest_block_height -gt $previous_block_height ]; then
-    echo "[ERROR] Attenzione qualcosa non funziona sul nodo $latest_block_height vs $previous_block_height"
+    echo "[ERROR] Warning, something is not working on the node: $latest_block_height vs $previous_block_height"
     printf $latest_block_height >$previous_block_height_rec
-    curl -s -S -X POST -H 'Content-type: application/json' --data '{"text":"*'$HOSTNAME'* Attenzione qualcosa non funziona sul nodo: '$latest_block_height' vs '$previous_block_height'!"}' "{{ slack_hook }}"
+    curl -s -S -X POST -H 'Content-type: application/json' --data '{"text":"*'$HOSTNAME'* Warning, something is not working on the node: '$latest_block_height' vs '$previous_block_height'!"}' "{{ slack_hook }}"
     exit
 fi
     printf $latest_block_height >$previous_block_height_rec
 
-echo "[OK] Sembra andare tutto bene per ora $latest_block_height vs $previous_block_height"
+echo "[OK] Everything seems to be working well for the moment $latest_block_height vs $previous_block_height"
