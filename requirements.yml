@@ -1,2 +1,4 @@
 collections:
   - 'gantsign.golang'
+roles:
+  - name: gantsign.golang

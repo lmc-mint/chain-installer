@@ -1,10 +1,11 @@
-- name: Install collection 
+- name: Install role at specific path
   community.general.ansible_galaxy_install:
-    type: collection
+    type: role
     name: gantsign.golang
+    dest: /ansible/roles
 
 - name: golang role
-  import_role:
+  include_role:
     name: gantsign.golang
   vars:
     golang_gopath: '{{ go_path }}'
