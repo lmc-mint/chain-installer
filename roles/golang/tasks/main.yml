@@ -1,9 +1,3 @@
-- name: Install role at specific path
-  community.general.ansible_galaxy_install:
-    type: role
-    name: gantsign.golang
-    dest: /ansible/roles
-
 - name: golang role
   include_role:
     name: gantsign.golang
