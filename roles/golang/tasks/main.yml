@@ -1,4 +1,9 @@
-- name: install-golang
+- name: Install collection 
+  community.general.ansible_galaxy_install:
+    type: collection
+    name: gantsign.golang
+
+- name: golang role
   import_role:
     name: gantsign.golang
   vars:
