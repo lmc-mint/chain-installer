@@ -17,12 +17,6 @@ The prerequisites to use this playbook are:
          ```bash
          ansible --version
          ```
-* Have `gantsign.golang` installed for ansible
-     * To install it:
-         ```bash
-         ansible-galaxy install gantsign.golang
-         ```
-
 ## Usage
 To use the playbook you need to proceed as follows:
 
