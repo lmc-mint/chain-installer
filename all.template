@@ -1,3 +1,6 @@
+chain_id: "commercio-testnet11k"
+moniker: "commercio-node"
+sync_type: "statesync"
 comm_user: "cnd"
 sync_node: ""
 sync_node_comm_user: "root"
