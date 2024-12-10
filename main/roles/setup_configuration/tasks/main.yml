@@ -98,14 +98,14 @@
 
 - name: Sync database from sync node
   command: "rsync -a --delete {{ sync_node_home_folder }}/.commercionetwork/data/ root@{{ ansible_host }}:/{{ drive_var }}/data/"
-  delegate_to: "{{ hostvars['ansible_host']['sync_node'] }}"
+  delegate_to: "{{ sync_node }}"
   when: sync_type == "push"
 
 - name: Stop sync node commercionetworkd service
   systemd:
     name: commercionetworkd
     state: stopped
-  delegate_to: "{{ hostvars['ansible_host']['sync_node'] }}"
+  delegate_to: "{{ sync_node }}"
   when: sync_type == "push" or sync_type == "pull"
 
 - name: Sync database from host
@@ -115,14 +115,14 @@
 
 - name: Sync database from sync node
   command: "rsync -a --delete {{ sync_node_home_folder }}/.commercionetwork/data/ root@{{ ansible_host }}:/{{ drive_var }}/data/"
-  delegate_to: "{{ hostvars['ansible_host']['sync_node'] }}"
+  delegate_to: "{{ sync_node }}"
   when: sync_type == "push"
 
 - name: Start sync node commercionetworkd service
   systemd:
     name: commercionetworkd
     state: started
-  delegate_to: "{{ hostvars['ansible_host']['sync_node'] }}"
+  delegate_to: "{{ sync_node }}"
   when: sync_type == "push" or sync_type == "pull"
 
 - name: Remove data folder
