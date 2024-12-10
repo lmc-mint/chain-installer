@@ -1,0 +1,6 @@
+chain_id: "commercio-testnet11k"
+moniker: "commercio-node"
+sync_type: "statesync"
+comm_user: "root"
+slack_hook: ""
+ANSIBLE_HOST_KEY_CHECKING: "False"
