@@ -49,6 +49,8 @@ To use the playbook you need to proceed as follows:
      | `custom_trust_rpc2` | Second RPC to sync from in case of sync_type = statesync `sync_type` = `statesync`.  |
      | `external_drive` | Optional parameter to specify the path if the node database should be installed on an external disk |
      | `slack_hook` | Webhook where to send reports about a node losing blocks. **No script will be installed if a webhook isn't set** |
+     | `ANSIBLE_HOST_KEY_CHECKING` | Set the variable to `False` to disbale ssh prompt for host key checks (skip the fingerprint) |
+
 
 
 - If you want to use a specific cosmovisor version , you can run the following command to list all the cosmovisor versions:

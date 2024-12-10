@@ -15,7 +15,7 @@
     return_content: yes
   register: chain_data
 
-- name: Parse json into variable
+- name: Parse chain data JSON
   set_fact:
     parsed_data: "{{ chain_data.content | from_json}}"
 
@@ -24,83 +24,11 @@
     seeds: "{{ parsed_data.Seeds }}"
     persistent_peers: "{{ parsed_data.Persistent_peers }}"
     checksum: "{{ parsed_data.Genesis_Checksum }}"
-
-- name: set default trust rpc1
-  set_fact:
-    trust_rpc1: "{{ parsed_data.Trust_rpc1 }}"
-  when: custom_trust_rpc1 is not defined or custom_trust_rpc1 == ''
-
-- name: set custom trust rpc1
-  set_fact:
-    trust_rpc1: "{{ custom_trust_rpc1 }}"
-  when: custom_trust_rpc1 is defined and custom_trust_rpc1 != ''
-
-- name: set default trust rpc2
-  set_fact:
-    trust_rpc2: "{{ parsed_data.Trust_rpc2 }}"
-  when: custom_trust_rpc2 is not defined or custom_trust_rpc2 == ''
-
-- name: set custom trust rpc2
-  set_fact:
-    trust_rpc2: "{{ custom_trust_rpc2 }}"
-  when: custom_trust_rpc2 is defined and custom_trust_rpc2 != ''
-
-- name: set default bin version
-  set_fact:
-    bin_version: "{{ parsed_data.Release }}"
-  when: custom_bin_version is not defined or custom_bin_version == ''
-
-- name: set custom bin version
-  set_fact:
-    bin_version: "{{ custom_bin_version }}"
-  when: custom_bin_version is defined and custom_bin_version != ''
-
-- name: set default cosmovisor version
-  set_fact:
-    cosmovisor_version: "v1.3.0"
-  when: custom_cosmovisor_version is not defined or custom_cosmovisor_version == ''
-
-- name: set custom cosmovisor version
-  set_fact:
-    cosmovisor_version: "{{ custom_bin_version }}"
-  when: custom_cosmovisor_version is defined and custom_cosmovisor_version != ''  
-
-- name: set default genesis file url
-  set_fact:
-    genesis: "https://raw.githubusercontent.com/commercionetwork/chains/master/{{ chain_id }}/genesis.json"
-  when: custom_genesis is not defined or custom_genesis == ''
-
-- name: set custom genesis file url
-  set_fact:
-    genesis: "{{ custom_genesis }}"
-  when: custom_genesis is defined and custom_genesis != ''  
-
-- name: set default go path
-  set_fact:
-    go_path: "{{ home_folder }}/go"
-  when: custom_go_path is not defined or custom_go_path == ''
-
-- name: set custom go path
-  set_fact:
-    go_path: "{{ custom_go_path }}"
-  when: custom_go_path is defined and custom_go_path != ''  
-
-- name: set default comm repo
-  set_fact:
-    comm_repo: "~/comm-binary"
-  when: custom_comm_repo is not defined or custom_comm_repo == ''
-
-- name: set custom comm repo
-  set_fact:
-    comm_repo: "{{ custom_comm_repo }}"
-  when: custom_comm_repo is defined and custom_comm_repo != ''  
-
-- name: set default cosmos repo
-  set_fact:
-    cosmos_repo: "~/cosmos-sdk"
-  when: custom_cosmos_repo is not defined or custom_cosmos_repo == ''
-
-- name: set custom cosmos repo
-  set_fact:
-    cosmos_repo: "{{ custom_cosmos_repo }}"
-  when: custom_cosmos_repo is defined and custom_cosmos_repo != ''  
+    trust_rpc1: "{{ custom_trust_rpc1 | default(parsed_data.Trust_rpc1) }}"
+    trust_rpc2: "{{ custom_trust_rpc2 | default(parsed_data.Trust_rpc2) }}"
+    bin_version: "{{ custom_bin_version | default(parsed_data.Release) }}"
+    cosmovisor_version: "{{ custom_cosmovisor_version | default('v1.3.0') }}"
+    genesis: "{{ custom_genesis | default('https://raw.githubusercontent.com/commercionetwork/chains/master/' + chain_id + '/genesis.json') }}"
+    go_path: "{{ custom_go_path | default(home_folder + '/go') }}"
+    comm_repo: "{{ custom_comm_repo | default('~/comm-binary') }}"
+    cosmos_repo: "{{ custom_cosmos_repo | default('~/cosmos-sdk') }}"
