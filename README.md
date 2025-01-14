@@ -33,7 +33,7 @@ To use the playbook you need to proceed as follows:
      | `moniker` | Name of the node |
      | `sync_type`| Determines how database synchronization occurs. Options:|
      |  |   • `pull`: Synchronization occurs by doing an rsync from the new node to the node from which it synchronizes.|
-     |  |   • `push`: Synchronization occurs by doing an rsync from the new node to the node from which it synchronizes.|
+     |  |   • `push`: Synchronization occurs by doing an rsync from the node from which you synchronize to the new node.|
      |  |   • `dump`: Synchronization occurs by dumping the dump to disk and unpacking it.|
      |  |   • `statesync`: Synchronization occurs via statesync.|
      |  |   • `none`: Synchronization occurs normally.|
@@ -50,7 +50,6 @@ To use the playbook you need to proceed as follows:
      | `external_drive` | Optional parameter to specify the path if the node database should be installed on an external disk |
      | `slack_hook` | Webhook where to send reports about a node losing blocks. **No script will be installed if a webhook isn't set** |
      | `ANSIBLE_HOST_KEY_CHECKING` | Set the variable to `False` to disbale ssh prompt for host key checks (skip the fingerprint) |
-
 
 
 - If you want to use a specific cosmovisor version , you can run the following command to list all the cosmovisor versions:
